@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3d By Thom</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, sans-serif;
+      color: #eaeaea;
+      background: #05030a;
+      overflow-x: hidden;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+
+    /* Canvas background */
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    header, main {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem 1rem;
+    }
+    header h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .project-card {
+      border-radius: 16px;
+      padding: 1.2rem;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+      transition: transform .3s, box-shadow .3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+    }
+    .project-card:hover {
+      transform: translateY(-1px) scale(1.005);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.6);
+    }
+    .project-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+    .project-card h4 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .project-card p {
+      margin-top: .4rem;
+      font-size: .9rem;
+      color: #aaa;
+    }
+    .tags {
+      margin-top: .6rem;
+    }
+    .tags span {
+      display: inline-block;
+      margin-right: .4rem;
+      font-size: .7rem;
+      padding: .2rem .5rem;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Better looking open project button */
+    .open-btn {
+      margin-top: auto;
+      padding: 0.6rem 1.4rem;
+      width: 95%;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #6a5acd, #00bcd4);
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      transition: transform 0.2s, box-shadow 0.3s;
+      align-self: center;
+    }
+    .open-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    }
+    .open-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+    .title {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(6px);
+      border-radius: 1.6em;
+      display: inline-block;
+      padding: 0.4em 0.8em;
+      box-shadow: 0 2px 18px rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.22);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+
+  <header>
+    <h1 class="title">3d By Thom</h1>
+  </header>
+
+<main>
+    <div class="grid">
+        <div class="project-card">
+            <img src="https://picsum.photos/400/200?random=1" alt="PO2">
+            <h4>PO2 - Giveaway Keychain Fidget</h4>
+            <p>Een keychain fidget gemaakt voor de open dag.</p>
+            <div class="tags"><span>3D Design</span><span>3D Printing</span></div>
+            <button class="open-btn" onclick="window.location.href='PO/PO2.html'">Open Project</button>
+        </div>
+        <div class="project-card">
+            <img src="https://picsum.photos/400/200?random=2" alt="Orbit project">
+            <h4>Orbit — Portfolio CMS</h4>
+            <p>Headless CMS for creatives with instant preview and static export.</p>
+            <div class="tags"><span>Next.js</span><span>GraphQL</span><span>Docker</span></div>
+            <button class="open-btn" onclick="window.location.href='https://example.com/orbit'">Open Project</button>
+        </div>
+        <div class="project-card">
+            <img src="https://picsum.photos/400/200?random=3" alt="Photon project">
+            <h4>Photon — Game UI Kit</h4>
+            <p>A library of performant UI primitives built for games and interactive apps.</p>
+            <div class="tags"><span>Typescript</span><span>Tailwind</span><span>Performance</span></div>
+            <button class="open-btn" onclick="window.location.href='https://example.com/photon'">Open Project</button>
+        </div>
+        <div class="project-card">
+            <img src="https://picsum.photos/400/200?random=4" alt="Glassroom project">
+            <h4>Glassroom — Design System</h4>
+            <p>A design system focused on glassmorphism and tactile micro-interactions.</p>
+            <div class="tags"><span>Figma</span><span>CSS</span><span>Design</span></div>
+            <button class="open-btn" onclick="window.location.href='https://example.com/glassroom'">Open Project</button>
+        </div>
+    </div>
+</main>
+
+  <script>
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+    let stars = [];
+    const STAR_COUNT = 400;
+
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.5 + 0.5,
+          d: Math.random() * STAR_COUNT
+        });
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      for (let i = 0; i < STAR_COUNT; i++) {
+        let s = stars[i];
+        ctx.moveTo(s.x, s.y);
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2, true);
+      }
+      ctx.fill();
+      updateStars();
+    }
+
+    function updateStars() {
+      for (let i = 0; i < STAR_COUNT; i++) {
+        let s = stars[i];
+        s.y += (i % 5) / 5 + 0.2;
+        if (s.y > h) {
+          s.x = Math.random() * w;
+          s.y = 0;
+        }
+      }
+    }
+
+    function animate() {
+      drawStars();
+      requestAnimationFrame(animate);
+    }
+
+    initStars();
+    animate();
+
+    window.addEventListener('resize', () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      initStars();
+    });
+  </script>
+</body>
+</html>
