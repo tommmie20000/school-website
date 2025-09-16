@@ -46,7 +46,7 @@
     </div>
 </main>
 
-  <script>
+<script>
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
     let w = canvas.width = window.innerWidth;
@@ -54,55 +54,183 @@
     let stars = [];
     const STAR_COUNT = 400;
 
+    // Glare settings
+    const GLARE_COUNT = 6;
+    let glares = [];
+
+    // Flying stars settings
+    const FLYING_STAR_INTERVAL = 20000; // ms
+    const FLYING_STAR_SPEED = 7;
+    const FLYING_STAR_LENGTH = 500;
+    let flyingStars = [];
+
+    function randomColor() {
+        // Soft pastel colors for glare
+        const hue = Math.floor(Math.random() * 360);
+        return `hsla(${hue}, 70%, 80%, 0.06)`;
+    }
+
+    function initGlares() {
+        glares = [];
+        for (let i = 0; i < GLARE_COUNT; i++) {
+            glares.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                r: Math.random() * 200 + 120,
+                dx: (Math.random() - 0.5) * 0.2,
+                dy: (Math.random() - 0.5) * 0.2,
+                dr: (Math.random() - 0.5) * 0.1,
+                color: randomColor()
+            });
+        }
+    }
+
+    function updateGlares() {
+        for (let g of glares) {
+            g.x += g.dx;
+            g.y += g.dy;
+            g.r += g.dr;
+            // Bounce off edges
+            if (g.x < 0 || g.x > w) g.dx *= -1;
+            if (g.y < 0 || g.y > h) g.dy *= -1;
+            if (g.r < 100 || g.r > 300) g.dr *= -1;
+        }
+    }
+
+    function drawGlares() {
+        for (let g of glares) {
+            const grad = ctx.createRadialGradient(g.x, g.y, 0, g.x, g.y, g.r);
+            grad.addColorStop(0, g.color);
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.globalAlpha = 1;
+            ctx.beginPath();
+            ctx.arc(g.x, g.y, g.r, 0, Math.PI * 2);
+            ctx.fillStyle = grad;
+            ctx.fill();
+        }
+    }
+
     function initStars() {
-      stars = [];
-      for (let i = 0; i < STAR_COUNT; i++) {
-        stars.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          r: Math.random() * 1.5 + 0.5,
-          d: Math.random() * STAR_COUNT
-        });
-      }
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                r: Math.random() * 1.5 + 0.5,
+                baseR: 0, // for twinkle
+                twinkleSpeed: Math.random() * 0.0005 + 0.0002,
+                twinklePhase: Math.random() * Math.PI * 2
+            });
+        }
     }
 
     function drawStars() {
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = "white";
-      ctx.beginPath();
-      for (let i = 0; i < STAR_COUNT; i++) {
-        let s = stars[i];
-        ctx.moveTo(s.x, s.y);
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2, true);
-      }
-      ctx.fill();
-      updateStars();
+        ctx.clearRect(0, 0, w, h);
+        drawGlares();
+        ctx.save();
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        for (let s of stars) {
+            // Twinkle: radius oscillates smoothly
+            s.baseR = s.r + Math.sin(performance.now() * s.twinkleSpeed + s.twinklePhase) * 0.6;
+            ctx.moveTo(s.x, s.y);
+            ctx.arc(s.x, s.y, Math.max(0.2, s.baseR), 0, Math.PI * 2);
+        }
+        ctx.globalAlpha = 0.85;
+        ctx.fill();
+        ctx.restore();
+        updateStars();
+        updateGlares();
     }
 
     function updateStars() {
-      for (let i = 0; i < STAR_COUNT; i++) {
-        let s = stars[i];
-        s.y += (i % 5) / 5 + 0.2;
-        if (s.y > h) {
-          s.x = Math.random() * w;
-          s.y = 0;
+        for (let s of stars) {
+            s.y += 0.08; // Slower movement (was 0.3)
+            if (s.y > h) { s.x = Math.random() * w; s.y = 0; }
         }
-      }
+    }
+
+    // Flying stars logic
+    function spawnFlyingStar() {
+        // Random direction: left->right or right->left, random vertical position
+        const dir = Math.random() < 0.5 ? 1 : -1;
+        const y = Math.random() * h * 0.8 + h * 0.1;
+        const x = dir === 1 ? -FLYING_STAR_LENGTH : w + FLYING_STAR_LENGTH;
+        const angle = Math.random() * 0.3 - 0.15; // slight angle
+        flyingStars.push({
+            x, y,
+            vx: (FLYING_STAR_SPEED * 0.2) * dir * Math.cos(angle), // Slower speed
+            vy: (FLYING_STAR_SPEED * 0.3) * Math.sin(angle),       // Slower speed
+            trail: [],
+            maxTrail: 18,
+            brightness: 1.0
+        });
+    }
+
+    function updateFlyingStars() {
+        for (let star of flyingStars) {
+            // Move star
+            star.x += star.vx;
+            star.y += star.vy;
+            // Add to trail
+            star.trail.unshift({ x: star.x, y: star.y, alpha: 1 });
+            if (star.trail.length > star.maxTrail) star.trail.pop();
+        }
+        // Remove stars out of bounds
+        flyingStars = flyingStars.filter(star =>
+            star.x > -FLYING_STAR_LENGTH && star.x < w + FLYING_STAR_LENGTH &&
+            star.y > -FLYING_STAR_LENGTH && star.y < h + FLYING_STAR_LENGTH
+        );
+    }
+
+    function drawFlyingStars() {
+        for (let star of flyingStars) {
+            // Draw trail
+            for (let i = 0; i < star.trail.length - 1; i++) {
+                const p1 = star.trail[i];
+                const p2 = star.trail[i + 1];
+                ctx.save();
+                ctx.strokeStyle = `rgba(255,255,255,${0.7 * (1 - i / star.trail.length)})`;
+                ctx.lineWidth = 2 - i * 1.5 / star.trail.length;
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+                ctx.restore();
+            }
+            // Draw star head
+            ctx.save();
+            ctx.globalAlpha = star.brightness;
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = 'white';
+            ctx.shadowColor = 'white';
+            ctx.shadowBlur = 16;
+            ctx.fill();
+            ctx.restore();
+        }
     }
 
     function animate() {
-      drawStars();
-      requestAnimationFrame(animate);
+        drawStars();
+        drawFlyingStars();
+        updateFlyingStars();
+        requestAnimationFrame(animate);
     }
 
     initStars();
+    initGlares();
     animate();
 
+    // Flying stars timer
+    let flyingStarTimer = setInterval(spawnFlyingStar, FLYING_STAR_INTERVAL);
+
     window.addEventListener('resize', () => {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-      initStars();
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        initStars();
+        initGlares();
     });
-  </script>
+</script>
 </body>
 </html>
