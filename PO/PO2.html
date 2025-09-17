@@ -12,23 +12,61 @@
   <main>
     <h1 class="title">PO2 - Giveaway Keychain Fidget</h1>
     <div class="tags"><span>CAD</span><span>3D Printing</span></div>
-    <img class="image" src="https://picsum.photos/800/400?random=11" alt="PO2 detail">
+    <img class="image" src="pics/PO2/product2.jpg" alt="PO2 detail">
 
-    <h2>Over het project</h2>
-    <p>Dit project is een 3D-geprinte keychain fidget die gemaakt is voor de open dag. Het doel was om iets kleins, handig en aantrekkelijk te maken voor bezoekers. Het ontwerp is geoptimaliseerd voor snelle productie en duurzaamheid.</p>
+<!--Title-->
+    <h2>Marktonderzoek + brainstorm</h2>
+<!--End-->
 
-    <h2>Ontwerpproces</h2>
-    <p>Het begon met schetsen en brainstormsessies om tot een compact en praktisch ontwerp te komen. Daarna is het model getekend in CAD-software en meerdere keren geprint om te testen en te verbeteren.</p>
-    <img class="image" src="https://picsum.photos/800/400?random=12" alt="Ontwerpproces">
+<!--Paragraph-->
+    <p>Ik begon mijn marktonderzoek door na te denken over wat kinderen in groep 8 van de basisschool leuk vinden. Later gebruikte ik dit als basis om mijn zoektocht te vereenvoudigen. Ik kwam allerlei ideeën tegen, zoals fidget spinners, sleutelhangers en andere leuke items, maar niets sprong er echt uit. Dus besloot ik in mijn kamer rond te kijken en kreeg ik ineens een goed idee. Een paar maanden geleden had ik namelijk van mijn sponsor PCBWay een schroevendraaier gekregen (zie foto), met een ratchet-mechanisme en verschillende handige functies. Vooral dat ratchet-mechanisme trok mijn aandacht, dus ging ik op Makerworld verder op zoek naar inspiratie. Uiteindelijk vond ik precies wat ik zocht. In de bijgevoegde brainstorm zie je ook dat ik steeds meer naar fidget toys neigde. Ik wilde namelijk iets maken dat kinderen niet meteen zouden weggooien, maar dat ze bijvoorbeeld aan hun sleutels konden hangen en mee konden spelen als ze zich verveelden. Daarom dacht ik dat een simpele sleutelhanger met bijvoorbeeld het Jan van Brabant-logo erop snel in de prullenbak zou belanden, omdat het niet echt nuttig is. Ik heb mijn ontwerp daarna uitgebreid getest bij mijn vrienden, en zij vonden het allemaal vrij leuk en interessant om mee te spelen.</p>
+<!--End-->
 
-    <h2>Resultaat</h2>
-    <p>Het uiteindelijke ontwerp was stevig, licht en gemakkelijk te produceren. Tijdens de open dag waren de keychains een groot succes en werden ze enthousiast ontvangen door bezoekers.</p>
-    <img class="image" src="https://picsum.photos/800/400?random=13" alt="Resultaat">
+<!--Image-->
+    <img class="image" src="pics/PO2/product5.jpg" alt="Schroevendraaier">
+<!--End-->
 
+<!--Title-->
+    <h2>Schets + ontwerp</h2>
+<!--End-->
+
+<!--Paragraph-->
+    <p>Normaal maak ik bijna nooit een schets en begin ik meteen met het ontwerp, waarna ik zie hoe het gaat. Ik heb dan een idee in mijn hoofd, wat je misschien een soort 'mentale schets' kunt noemen, en dat werk ik vaak vanzelf uit in Fusion360 en later in het echte ontwerp. Voor dit project heb ik wel op een paar dingen gelet die erin moesten. Ik wilde een S-vormige veer maken van 0,8 mm breed (omdat de nozzle 0,4 mm is, wat zorgt voor een veer die niet te moeilijk in te drukken is, maar ook niet te snel kapot gaat). De as waar het wiel op zat, was ook een uitdaging, want het moest soepel kunnen draaien én goed te printen zijn. Eerst had ik een V-vorm gemaakt (twee keer een 'V' in elkaar, waarbij de onderkant van de V vastzat aan het lichaam, zie in de foto's hieronder). Maar het printte niet goed, en het wiel kwam vast te zitten aan het lichaam. Daarom heb ik de vorm veranderd naar een rechthoek, en nu draait het wiel soepel en werkt het goed.</p>
+<!--End-->
+
+<!--Image-->
+    <img class="image" src="pics/PO2/product6.png" alt="Ontwerpproces">
+<!--End-->
+
+<!--Image-->
+    <img class="image" src="pics/PO2/product7.png" alt="Ontwerpproces">
+<!--End-->
+<!--Title-->
+    <h2>Reflectie</h2>
+<!--End-->
+
+<!--Paragraph-->
+    <p>Ik vond dit een leuk project om te maken en heb er wel wat van geleerd (niet heel veel), zoals dat PETG het beste materiaal is om veren mee te printen, hoe je een 3D-geprinte 'bearing' het beste kunt maken en hoe je ontwerpen kunt optimaliseren voor print-in-place. Ik ben tevreden met het eindresultaat en hoop zeker dat het gekozen wordt voor de giveaway.</p>
+<!--End-->
+
+<!--Title-->
+    <h2>Mindmap</h2>
+<!--End-->
+
+<!--Zooming image-->
+    <img class="image" src="pics/PO2/mindmap.jpg" alt="Ontwerpproces">
+    <script src="https://unpkg.com/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<!--End-->
+
+<!--Back button-->
     <a href="../index.html" class="back-btn">← Terug naar Portfolio</a>
-  </main>
+<!--End--> 
+
+</main>
 
 <script>
+    mediumZoom('.image', { background: 'transparent' })
+
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
     let w = canvas.width = window.innerWidth;

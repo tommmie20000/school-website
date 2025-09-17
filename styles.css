@@ -9,8 +9,31 @@
       user-select: none;
       -webkit-user-select: none;
       -ms-user-select: none;
+      height: 100%;
+    }
+    /* Scrollbar width */
+    ::-webkit-scrollbar {
+      width: 10px;
     }
 
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #494949, #909090);
+      border-radius: 10px;
+      border: 2px solid transparent; /* creates spacing around thumb */
+      background-clip: content-box;  /* keeps border transparent */
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #888, #444);
+    }
     /* Canvas background */
     #starfield {
       position: fixed;
@@ -42,9 +65,12 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
+      row-gap: 4rem;     /* vertical spacing */
+      column-gap: 1.5rem; /* horizontal spacing */
       margin-top: 2rem;
+      margin-bottom: 4rem;
     }
+
     .project-card {
       border-radius: 16px;
       padding: 1.2rem;

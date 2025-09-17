@@ -35,19 +35,15 @@
         font-size: 1.8rem;
         color: #9cdcfb;
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(6px);
+        backdrop-filter: blur(3px);
         border-radius: 1.6em;
         display: inline-block;
         padding: 0.4em 0.8em;
         box-shadow: 0 2px 18px rgba(0,0,0,0.18);
         border: 1px solid rgba(255,255,255,0.22);
     }
-    p {
-        margin-top: 0.8rem;
-        line-height: 1.6;
-    }
     img {
-        max-width: 100%;
+        max-width: 80%;
         border-radius: 12px;
         margin: 1.5rem 0;
         box-shadow: 0 10px 25px rgba(0,0,0,0.5);
@@ -112,12 +108,14 @@
         transition: transform 0.25s cubic-bezier(.4,2,.3,1), background-color 0.25s, box-shadow 0.25s, border 0.25s;
     }
     p {
-        padding: 0.1rem;
+        padding: 0.5rem;
         background-color: rgba(151, 151, 151, 0.205);   
         box-shadow: 0 2px 18px rgba(0,0,0,0.18);
-        border: 1px solid rgba(255, 255, 255, 0.425);
-        backdrop-filter: blur(10px);
-        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.12);
+        backdrop-filter: blur(2px);
+        border-radius: 20px;
+        margin-top: 0.8rem;
+        line-height: 1.6;
     }
     .tags {
       margin-top: .6rem;
@@ -130,4 +128,19 @@
       border-radius: 8px;
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(3px);
     }
+.medium-zoom-overlay,
+.medium-zoom-image--opened {
+  z-index: 9999 !important;
+}
+
+p a {
+    text-decoration: none;
+    color: rgb(184, 184, 184);
+}
+
+p a:hover {
+    text-decoration: underline;
+    color: #9cdcfb;
+}
