@@ -177,3 +177,93 @@
         color: #ffffff;
         margin-bottom: 0.5rem;
     }
+/* Dropdown block */
+.dropdown {
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 1.2rem;
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  background: rgba(255, 255, 255, 0.08); /* lighter base */
+  transition: all 0.3s ease;
+}
+
+/* Header button */
+.dropdown-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  color: #eaeaea;
+  font-size: 1.05rem;
+  padding: 1rem 1.4rem;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: background 0.3s ease, transform 0.25s ease;
+}
+
+.dropdown-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Arrow styling */
+.dropdown-btn .arrow {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(.4,1.4,.3,1);
+  font-size: 1.2rem;
+}
+
+.dropdown.active .arrow {
+  transform: rotate(180deg);
+}
+
+/* Collapsible content */
+.dropdown-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 1.4rem;
+  background: rgba(255, 255, 255, 0.04); /* very subtle glass tone */
+  border-top: 1px solid rgba(255,255,255,0.15);
+  transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.3s ease;
+  text-align: left;
+}
+
+.dropdown.active .dropdown-content {
+  max-height: 400px; /* enough space for the text */
+  opacity: 1;
+  padding: 1rem 1.4rem 1.4rem;
+}
+
+/* Inner text */
+.dropdown-content p {
+  margin: 0;
+  padding: 0;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  line-height: 1.6;
+  color: #eaeaea;
+}
+
+.side-by-side-images {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center; /* <-- center the images as a row */
+  width: 100%; /* allow full width */
+}
+
+.side-by-side-images img {
+  flex: 0 1 48%; /* max 48% of the container */
+  max-width: 48%; /* ensures they don’t stretch beyond 48% */
+  height: auto;
+}
