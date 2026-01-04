@@ -3,78 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3d By Thom</title>
-<link rel="stylesheet" href="styles.css">
+  <title>PO10 - Foto</title>
+  <link rel="stylesheet" href="POstyles.css">
+    <script src="https://unpkg.com/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
 </head>
 <body>
+  <a href="../index.html" class="top-left-back-btn" title="Terug naar Home">&#8592;</a>
   <canvas id="starfield"></canvas>
+  <main>
+    <h1 class="title">PO10 - Foto</h1>
+    <div class="tags"><span>Powerpoint</span><span>Research</span></div>
+    <img class="image" src="pics/PO10/" alt="PO10 detail" style="overflow: hidden;">
 
-  <header>
-    <h1 class="title">3d By Thom</h1>
-  </header>
+        <!-- Image gallery box with arrows and captions -->
+        <div class="gallery-box">
+            <button class="arrow left" aria-label="Previous">&#10094;</button>
+            <div class="image-slots">
+                <figure class="slot active">
+                    <img src="pics/PO10/image1.jpg" alt="Project view 1">
+                    <figcaption>Omschrijving / commentaar 1</figcaption>
+                </figure>
+                <figure class="slot">
+                    <img src="pics/PO10/image2.jpg" alt="Project view 2">
+                    <figcaption>Omschrijving / commentaar 2</figcaption>
+                </figure>
+                <figure class="slot">
+                    <img src="pics/PO10/image3.jpg" alt="Project view 3">
+                    <figcaption>Omschrijving / commentaar 3</figcaption>
+                </figure>
+            </div>
+            <button class="arrow right" aria-label="Next">&#10095;</button>
+        </div>
 
-<main>
-    <div class="grid">
-        <div class="project-card">
-            <img src="PO/pics/PO2/product1.jpg" alt="PO2">
-            <h4>PO2 - Giveaway Keychain Fidget</h4>
-            <p>Een keychain fidget gemaakt voor de open dag.</p>
-            <div class="tags"><span>CAD</span><span>3D Printing</span></div>
-            <button class="open-btn" onclick="window.location.href='PO/PO2.html'">Open Project</button>
-        </div>
-        <div class="project-card">
-            <img src="PO/pics/PO3/ezgif.com-effects.gif" alt="PO3">
-            <h4>PO3 - Flatpack furniture - Comfortabele stoel</h4>
-            <p>Stoelen en zitplekken</p>
-            <div class="tags"><span>CAD</span><span>3D Printing</span><span>Multimateriaal</span></div>
-            <button class="open-btn" onclick="window.location.href='PO/PO3.html'">Open Project</button>
-        </div>
-        <div class="project-card">
-            <img src="https://media.fbcpowell.org/wp-content/uploads/2018/09/01113226/break-chains.jpg" alt="Photon project">
-            <h4>PO4 - Materialenonderzoek</h4>
-            <p>Materialenonderzoek.</p>
-            <div class="tags"><span>Powerpoint</span><span>Digital design</span><span>Research</span></div>
-            <button class="open-btn" onclick="window.location.href='PO/PO4.html'">Open Project</button>
-        </div>
-        <div class="project-card">
-            <img src="PO/pics/PO5/3.png" alt="Glassroom project">
-            <h4>PO5 - Parfumflesje - TomTom</h4>
-            <p>Een parfumflesje om gemaakt te worden door NTS botech.</p>
-            <div class="tags"><span>CAD</span><span>3D print</span><span>Milling</span></div>
-            <button class="open-btn" onclick="window.location.href='PO/PO5.html'">Open Project</button>
-        </div>
-        <div class="project-card">
-            <img src="PO/pics/PO7/side top dark.jpg" alt="Glassroom project">
-            <h4>PO7 - LED THERE BE LIGHT</h4>
-            <p>Een prachtige houten lamp.</p>
-            <div class="tags"><span>Adobe Illustrator</span><span>Laser snijden</span><span>Light</span></div>
-            <button class="open-btn" onclick="window.location.href='PO/PO7.html'">Open Project</button>
-        </div>
-        <div class="project-card">
-            <img src="PO/pics/PO8/20251101_154323.jpg" alt="Glassroom project">
-            <h4>PO8 - Ontwerp voor alle breinen</h4>
-            <p>Reader+</p>
-            <div class="tags"><span>Research</span><span>Design</span><span>Teamwork</span></div>
-            <button class="open-btn" onclick="window.location.href='PO/PO8.html'">Open Project</button>
-        </div>
-        <div class="project-card">
-            <img src="PO/pics/PO9/drifter.webp" alt="Glassroom project">
-            <h4>PO9 - Kruip in de huid van een Nederlandse ontwerper</h4>
-            <p>Studio DRIFT!</p>
-            <div class="tags"><span>Powerpoint</span></div>
-            <button class="open-btn" onclick="window.location.href='PO/PO9.html'">Open Project</button>
-        </div>
-        <div class="project-card">
-            <img src="PO/pics/PO10/" alt="Glassroom project">
-            <h4>PO10 - Foto</h4>
-            <p>Fotos maken!</p>
-            <div class="tags"><span>Camera</span><span>Fotos</span><span>licht</span></div>
-            <button class="open-btn" onclick="window.location.href='PO/PO10.html'">Open Project</button>
-        </div>
-    </div>
+
+<!--Back button-->
+    <a href="../index.html" class="back-btn">← Terug naar Portfolio</a>
+<!--End--> 
+
 </main>
 
 <script>
+  mediumZoom('.image', {
+    background: 'transparent',
+    margin: 24 // optional: prevents edge-to-edge stretch
+  })
+
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
     let w = canvas.width = window.innerWidth;
@@ -259,6 +232,36 @@
         initStars();
         initGlares();
     });
+</script>
+<!-- Gallery navigation script -->
+<script>
+    (function(){
+        const initGallery = () => {
+            const gallery = document.querySelector('.gallery-box');
+            if (!gallery) return;
+            const slots = Array.from(gallery.querySelectorAll('.slot'));
+            const left = gallery.querySelector('.arrow.left');
+            const right = gallery.querySelector('.arrow.right');
+            let idx = 0;
+
+            function show(i) {
+                idx = (i + slots.length) % slots.length;
+                slots.forEach((s, j) => s.classList.toggle('active', j === idx));
+            }
+
+            left.addEventListener('click', () => show(idx - 1));
+            right.addEventListener('click', () => show(idx + 1));
+
+            // keyboard support
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') show(idx - 1);
+                if (e.key === 'ArrowRight') show(idx + 1);
+            });
+        };
+
+        if (document.readyState !== 'loading') initGallery();
+        else document.addEventListener('DOMContentLoaded', initGallery);
+    })();
 </script>
 </body>
 </html>
