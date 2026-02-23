@@ -3,22 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PO10 - Foto</title>
+  <title>PO10 - Fotos - Deel 1/2</title>
   <link rel="stylesheet" href="POstyles.css">
     <script src="https://unpkg.com/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<style>
+/* 
+1) Base wrapper 
+- Creates a positioned container that clips overflow. 
+- All visual effects will be applied within this boundary.
+*/
+.de-liquidGlass-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 
+2) Distortion + Blur Layer (Pseudo-element ::before)
+- Applies a blurred distortion effect using an SVG filter. 
+- Positioned to extend well beyond the wrapper to ensure full coverage, even on scroll.
+- `isolation: isolate` ensures the blend effects are contained.
+- `pointer-events: none` ensures the layer doesn't block clicks.
+*/
+.de-liquidGlass-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: -50%; /* Expands the element outward in all directions */
+  pointer-events: none;
+  isolation: isolate;
+  -webkit-backdrop-filter: blur(3px); /* Safari support */
+  backdrop-filter: blur(3px);         /* Applies the blur effect */
+  filter: url(#de-glass-distortion);  /* SVG filter ID for distortion effect */
+}
+
+/* 
+3) Tint + Shine Layer (Pseudo-element ::after)
+- Adds a semi-transparent white overlay for a frosted/tinted look.
+- Inner shadows simulate light reflection and glass highlights.
+- Also does not block mouse interaction.
+*/
+.de-liquidGlass-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(255,255,255,0.25); /* Soft white tint */
+  box-shadow:
+    inset 2px 2px 1px rgba(255,255,255,0.5),   /* Top-left highlight */
+    inset -1px -1px 1px rgba(255,255,255,0.5); /* Bottom-right highlight */
+}
+
+/* 
+4) Content Layer
+- Ensures any content (Divi modules and columns) within the wrapper
+  is rendered above the visual glass effect.
+- This prevents the content from being blurred or distorted.
+*/
+.de-liquidGlass-wrapper .et_pb_column,
+.de-liquidGlass-wrapper .et_pb_column .et_pb_module {
+  position: relative;
+  z-index: 1;
+}    
+</style>
 </head>
 <body>
   <a href="../index.html" class="top-left-back-btn" title="Terug naar Home">&#8592;</a>
   <canvas id="starfield"></canvas>
   <main>
-    <h1 class="title">PO10 - Foto</h1>
-    <div class="tags"><span>Powerpoint</span><span>Research</span></div>
+    <h1 class="title">PO10 - Fotos - Deel 1/2</h1>
+    <div class="tags"><span>Foto's</span><span>Posering</span><span>Creativiteit</span></div>
     <img class="image" src="pics/PO10/bas1.jpg" alt="PO10 detail" style="overflow: hidden;">
-
+    <div class="de-liquid-glass-wrapper">
+    <p class="haslist">
+     In de eerste les was er uitgelegd dat we fotos moesten gaan maken om te oefenen voor de grote opdracht. Elke les moesten we letten op een bepaalde factor, waaronder: <br>
+     <b>1. Licht</b> - 6 proeffoto's<br>
+     <b>2. Achtergrond/context</b> - 6 proeffoto's<br>
+     <b>3. Houding en blik van de geportretteerde</b> - 6 proeffoto's<br>
+     <b>4. Oogcontact</b> - 4 proeffoto's<br>
+     <b>5. Kader/afsnijding</b> - 6 proeffoto's<br>
+     <b>6. Emotie/verhaal</b> - 4 proeffoto's<br>
+     <b>7. Relatie tussen de fotograaf en de geportretteerde</b> - 4 proeffoto's<br>
+     <b>8. Inclusiviteit / diversiteit</b> - 6 proeffoto's<br>
+     <br>
+     Deze factoren zijn allemaal te zien in de fotos hieronder. Bij elke foto staat een beschrijving.    
+    </p>
+    </div>    
     <h2>Licht</h2>
-        <!-- Image gallery box with arrows and captions -->
+            <!-- Image gallery box with arrows and captions -->
         <div class="gallery-box">
-            <button class="arrow left" aria-label="Previous">&#10094;</button>
+            <div class="gallery-counter" aria-hidden="true"><span class="current">1</span>/<span class="total">6</span></div>
+        <button class="arrow left" aria-label="Previous">
+          <svg width="20" height="20" viewBox="0 0 24 24"
+               fill="none" stroke="white" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>            
             <div class="image-slots">
                 <figure class="slot active">
                     <img src="pics\PO10\20251201_094039.jpg" alt="Project view 1">
@@ -45,9 +124,16 @@
                     <figcaption>Kunstlicht, van boven. dit geeft een machtig gevoel van het persoon. lijkt natuurlijk.</figcaption>
                 </figure>
             </div>
-            <button class="arrow right" aria-label="Next">&#10095;</button>
+            <button class="arrow right" aria-label="Next">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
         </div>
 
+    <h2>Achtergrond/context</h2>
+
+    
 
 <!--Back button-->
     <a href="../index.html" class="back-btn">← Terug naar Portfolio</a>
@@ -260,21 +346,272 @@
             function show(i) {
                 idx = (i + slots.length) % slots.length;
                 slots.forEach((s, j) => s.classList.toggle('active', j === idx));
+                // update counter
+                const counter = gallery.querySelector('.gallery-counter');
+                if (counter) {
+                    const currentEl = counter.querySelector('.current');
+                    currentEl.textContent = String(idx + 1);
+                    // animate a brief flash/pop
+                    counter.classList.remove('flash');
+                    void counter.offsetWidth;
+                    counter.classList.add('flash');
+                }
+                // reposition arrows next to the visible image
+                positionArrows();
+                positionCaption();
             }
 
             left.addEventListener('click', () => show(idx - 1));
             right.addEventListener('click', () => show(idx + 1));
+
+            // Enable medium-zoom on gallery images
+            let zoomInstance = null;
+            try{
+                const galleryImgs = gallery.querySelectorAll('.slot img');
+                if (galleryImgs.length) {
+                    zoomInstance = mediumZoom(Array.from(galleryImgs), { background: 'rgba(0,0,0,0.85)', margin: 24 });
+                    // when zoom opens, create a caption overlay for the zoomed image
+                    if (zoomInstance && typeof zoomInstance.on === 'function'){
+                        zoomInstance.on('open', ({target}) => {
+                            const srcImg = target || document.querySelector('.medium-zoom-image--opened');
+                            showZoomCaptionFor(srcImg);
+                        });
+                        zoomInstance.on('close', () => {
+                            removeZoomCaption();
+                        });
+                    }
+                }
+            } catch (e) {
+                // medium-zoom not available or error; silently ignore
+            }
+
+            // compute and set arrow positions so they sit next to the current image
+            function positionArrows(){
+                const leftArrow = gallery.querySelector('.arrow.left');
+                const rightArrow = gallery.querySelector('.arrow.right');
+                if (!leftArrow || !rightArrow) return;
+                const active = gallery.querySelector('.slot.active');
+                if (!active) return;
+                const img = active.querySelector('img');
+                if (!img) return;
+                const gRect = gallery.getBoundingClientRect();
+                const iRect = img.getBoundingClientRect();
+                const arrowW = leftArrow.offsetWidth || 48;
+                const gap = 8; // px gap between image and arrow
+                // left arrow: place just to left of image
+                let leftPos = iRect.left - gRect.left - arrowW - gap;
+                // right arrow: place just to right of image
+                let rightPos = iRect.left - gRect.left + iRect.width + gap;
+                // clamp so arrows remain inside gallery box
+                leftPos = Math.max(6, Math.min(leftPos, gRect.width - arrowW - 6));
+                rightPos = Math.max(6, Math.min(rightPos, gRect.width - arrowW - 6));
+                leftArrow.style.left = leftPos + 'px';
+                rightArrow.style.left = rightPos + 'px';
+                // vertically center to image center
+                const topPos = (iRect.top - gRect.top) + (iRect.height / 2);
+                leftArrow.style.top = topPos + 'px';
+                rightArrow.style.top = topPos + 'px';
+                // ensure transform preserves vertical centering
+                leftArrow.style.transform = 'translateY(-50%)';
+                rightArrow.style.transform = 'translateY(-50%)';
+            }
+
+            // position caption bubble so it fits within the visible image
+            function positionArrows(){
+                const leftArrow = gallery.querySelector('.arrow.left');
+                const rightArrow = gallery.querySelector('.arrow.right');
+                if (!leftArrow || !rightArrow) return;
+            
+                const active = gallery.querySelector('.slot.active');
+                if (!active) return;
+            
+                const img = active.querySelector('img');
+                if (!img) return;
+            
+                const gRect = gallery.getBoundingClientRect();
+                const iRect = img.getBoundingClientRect();
+            
+                const arrowW = leftArrow.offsetWidth || 48;
+                const gap = 8;
+            
+                let leftPos = iRect.left - gRect.left - arrowW - gap;
+                let rightPos = iRect.left - gRect.left + iRect.width + gap;
+            
+                leftPos = Math.max(6, Math.min(leftPos, gRect.width - arrowW - 6));
+                rightPos = Math.max(6, Math.min(rightPos, gRect.width - arrowW - 6));
+            
+                leftArrow.style.left = leftPos + 'px';
+                rightArrow.style.left = rightPos + 'px';
+            }
+
+
+            // show caption for zoomed image by creating a fixed overlay element
+            let _zoomCaptionEl = null;
+            function showZoomCaptionFor(srcImg){
+                removeZoomCaption();
+                if (!srcImg) return;
+                // find the original figure's caption text
+                const orig = Array.from(gallery.querySelectorAll('.slot img')).find(i=>i.src === srcImg.src || i.getAttribute('data-zoom-src') === srcImg.src) || null;
+                let text = '';
+                if (orig) {
+                    const fig = orig.closest('.slot');
+                    const cap = fig && fig.querySelector('figcaption');
+                    if (cap) text = cap.textContent.trim();
+                }
+                if (!text) return;
+                _zoomCaptionEl = document.createElement('div');
+                _zoomCaptionEl.className = 'medium-zoom-caption';
+                _zoomCaptionEl.textContent = text;
+                document.body.appendChild(_zoomCaptionEl);
+                // position repeatedly for a short time to follow medium-zoom animation
+                let frames = 0;
+                function tick(){
+                    positionZoomCaption();
+                    frames++;
+                    if (frames < 12 && _zoomCaptionEl) requestAnimationFrame(tick);
+                }
+                requestAnimationFrame(tick);
+                // reposition while zoomed in on resize/scroll
+                window.addEventListener('resize', positionZoomCaption);
+                window.addEventListener('scroll', positionZoomCaption, true);
+            }
+            function removeZoomCaption(){
+                if (_zoomCaptionEl){
+                    _zoomCaptionEl.remove();
+                    _zoomCaptionEl = null;
+                    window.removeEventListener('resize', positionZoomCaption);
+                    window.removeEventListener('scroll', positionZoomCaption, true);
+                }
+            }
+            function positionZoomCaption(){
+                if (!_zoomCaptionEl) return;
+                const opened = document.querySelector('.medium-zoom-image--opened');
+                if (!opened) return;
+                const r = opened.getBoundingClientRect();
+                // center caption horizontally and place near bottom of opened image
+                _zoomCaptionEl.style.left = (r.left + r.width / 2) + 'px';
+                // place caption above the bottom edge of the opened image
+                const capH = _zoomCaptionEl.offsetHeight || 40;
+                const topPos = (r.top + r.height) - capH - 18;
+                _zoomCaptionEl.style.top = topPos + 'px';
+                _zoomCaptionEl.style.transform = 'translate(-50%, 0)';
+                _zoomCaptionEl.style.maxWidth = Math.max(120, r.width - 48) + 'px';
+            }
+
+            // reposition on resize and when images load
+            window.addEventListener('resize', () => {
+                requestAnimationFrame(positionArrows);
+                requestAnimationFrame(positionCaption);
+            });
+            gallery.querySelectorAll('.slot img').forEach(img => img.addEventListener('load', ()=> {
+                requestAnimationFrame(positionArrows);
+                requestAnimationFrame(positionCaption);
+            }));
 
             // keyboard support
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') show(idx - 1);
                 if (e.key === 'ArrowRight') show(idx + 1);
             });
+            // allow click on visible image to hint zoom: subtle scale on press
+            gallery.addEventListener('pointerdown', (ev)=>{
+                const img = ev.target.closest && ev.target.closest('.slot') && ev.target.closest('.slot').querySelector('img');
+                if (!img) return;
+                img.style.transform = 'scale(0.995)';
+            });
+            gallery.addEventListener('pointerup', (ev)=>{
+                const img = ev.target.closest && ev.target.closest('.slot') && ev.target.closest('.slot').querySelector('img');
+                if (!img) return;
+                img.style.transform = '';
+            });
+            // ensure arrows and caption positioned on init (in case images were already cached)
+            requestAnimationFrame(()=>{ positionArrows(); positionCaption(); });
+            // extra attempt after layout settles
+            setTimeout(()=>{ positionArrows(); positionCaption(); }, 120);
+            // also position when entire window loads
+            window.addEventListener('load', () => requestAnimationFrame(()=>{ positionArrows(); positionCaption(); }));
         };
 
         if (document.readyState !== 'loading') initGallery();
         else document.addEventListener('DOMContentLoaded', initGallery);
     })();
 </script>
+
+<svg style="display: none">
+  <!-- 
+    This SVG defines a custom filter for a liquid glass distortion effect.
+    It should be placed somewhere in your HTML (preferably near the top, such as in the <head> or before closing </body>).
+  -->
+  <filter id="de-glass-distortion" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox">
+
+    <!-- 
+      1) Turbulence: Generates a noise texture for the distortion
+      - `type="fractalNoise"` creates a smoother, cloudy noise
+      - `baseFrequency` controls the size and density of the noise
+      - `animate` cycles through different seeds to make the distortion look fluid
+    -->
+    <feTurbulence 
+      type="fractalNoise" 
+      baseFrequency="0.01 0.01" 
+      numOctaves="1" 
+      seed="5" 
+      result="turbulence">
+        <animate attributeName="seed" from="1" to="200" dur="8s" repeatCount="indefinite"/>
+    </feTurbulence>
+
+    <!-- 
+      2) Color Mapping: Controls how the noise affects the RGB channels
+      - This stage adjusts the turbulence so it mainly affects the red channel (used for displacement)
+      - Green and blue channels are suppressed to reduce distortion in those axes
+    -->
+    <feComponentTransfer in="turbulence" result="mapped">
+      <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5"/>
+      <feFuncG type="gamma" amplitude="0" exponent="1" offset="0"/>
+      <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5"/>
+    </feComponentTransfer>
+
+    <!-- 
+      3) Blur: Softens the turbulence map for smoother distortion
+    -->
+    <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap"/>
+
+    <!-- 
+      4) Lighting: Adds a specular light highlight based on the noise shape
+      - Simulates light reflecting off a bumpy glass surface
+    -->
+    <feSpecularLighting 
+      in="softMap" 
+      surfaceScale="5" 
+      specularConstant="1" 
+      specularExponent="100" 
+      lighting-color="white" 
+      result="specLight">
+        <fePointLight x="-200" y="-200" z="300"/>
+    </feSpecularLighting>
+
+    <!-- 
+      5) Composite: Merges the lighting effect with the noise
+    -->
+    <feComposite 
+      in="specLight" 
+      operator="arithmetic" 
+      k1="0" k2="1" k3="1" k4="0" 
+      result="litImage"/>
+
+    <!-- 
+      6) Displacement: Distorts the original graphic using the noise map
+      - `scale` controls intensity
+      - `xChannelSelector="R"` means distortion is driven by the red channel
+      - `yChannelSelector="G"` uses the (mostly suppressed) green channel
+    -->
+    <feDisplacementMap 
+      in="SourceGraphic" 
+      in2="softMap" 
+      scale="150" 
+      xChannelSelector="R" 
+      yChannelSelector="G"/>
+
+  </filter>
+</svg>
 </body>
 </html>
