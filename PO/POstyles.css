@@ -237,9 +237,9 @@ html, body {
 }
 
 .dropdown.active .dropdown-content {
-  max-height: 400px; /* enough space for the text */
+  max-height: none; /* enough space for the text */
   opacity: 1;
-  padding: 1rem 1.4rem 1.4rem;
+  padding: 1rem 1.4rem 0;
 }
 
 /* Inner text */
@@ -362,8 +362,8 @@ html, body {
   max-width: none; /* allow the image area to use full available space */
   overflow: hidden;
   position: relative;
-  min-height: 360px;
-  border-radius: 10px;
+  min-height: 700px;
+  border-radius: 20px;
 }
 figure.slot {
   position: absolute;
@@ -380,7 +380,6 @@ figure.slot {
   pointer-events: none;
   transform: translateY(12px) scale(0.992);
   transition: opacity 520ms cubic-bezier(.2,.9,.3,1), transform 520ms cubic-bezier(.2,.9,.3,1);
-  border-radius: 10px;
 }
 
 figure.slot.active {
@@ -395,7 +394,7 @@ figure.slot img {
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0 16px 40px rgba(0,0,0,0.55);
   border: 1px solid rgba(255,255,255,0.04);
   transition: transform 420ms cubic-bezier(.2,.9,.3,1), box-shadow 420ms;
@@ -497,4 +496,186 @@ figure.slot figcaption::after{
   padding-bottom: 0.8rem;
   padding-top: 0.8rem;
   background-color: none;
+}
+
+.dropdown-img {
+  max-width: 95%;
+  display: block;
+  margin: 1rem auto;
+}
+
+
+.gallery-described {
+  position: relative;
+  width: min(900px, 100%);
+  max-width: 900px;
+  margin: 1.6rem auto;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  background: rgba(255,255,255,0.06);
+  transition: width 680ms cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Image stage — now the whole block, desc overlays inside it ── */
+.gd-stage {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.25);
+}
+
+/* ── Each slide ── */
+.gd-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.982) translateY(10px);
+  transition:
+    opacity   480ms cubic-bezier(.2,.9,.3,1),
+    transform 480ms cubic-bezier(.2,.9,.3,1);
+}
+.gd-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1) translateY(0);
+}
+.gd-slide img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  cursor: zoom-in;
+}
+
+/* ── Overlay description — sits at the bottom of the stage ── */
+.gd-desc {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+
+  padding: 1.1rem 1.5rem 1.3rem;
+
+  /* frosted glass */
+  background: linear-gradient(
+    to top,
+    rgba(5, 3, 10, 0.82) 0%,
+    rgba(5, 3, 10, 0.55) 60%,
+    rgba(5, 3, 10, 0.0)  100%
+  );
+  backdrop-filter: blur(8px) saturate(130%);
+  -webkit-backdrop-filter: blur(8px) saturate(130%);
+
+  /* cross-fade between descs */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition:
+    opacity   420ms cubic-bezier(.2,.9,.3,1),
+    transform 420ms cubic-bezier(.2,.9,.3,1);
+}
+.gd-desc.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Hovering the desc itself fades it away */
+.gd-desc:hover {
+  opacity: 0 !important;
+  transform: translateY(4px) !important;
+  transition:
+    opacity   300ms cubic-bezier(.4,0,1,1),
+    transform 300ms cubic-bezier(.4,0,1,1);
+}
+
+.gd-desc-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #9cdcfb;
+  margin: 0 0 0.3rem;
+  letter-spacing: 0.2px;
+}
+.gd-desc-body {
+  font-size: 0.75rem;
+  color: #d4e8f0;
+  line-height: 1.6;
+  margin: 0;
+  /* keep long descriptions from taking over the whole image */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Arrows ── */
+.gd-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg,rgba(6,8,12,0.55),rgba(12,14,20,0.22));
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  z-index: 6;
+  transition: background 0.2s, transform 0.15s;
+  user-select: none;
+  font-size: 1.3rem;
+  color: #fff;
+}
+.gd-arrow:hover  { background: rgba(0,0,0,0.6); }
+.gd-arrow.left   { left:  12px; }
+.gd-arrow.right  { right: 12px; }
+.gd-arrow:active { transform: translateY(-50%) scale(0.92); }
+
+/* ── Counter badge ── */
+.gd-counter {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(6px);
+  color: #e9fbff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 10px;
+  z-index: 6;
+  white-space: nowrap;
+}
+.gd-counter.pop { animation: gdPop 380ms cubic-bezier(.2,.9,.3,1); }
+@keyframes gdPop {
+  0%   { transform: translateX(-50%) scale(0.88); }
+  60%  { transform: translateX(-50%) scale(1.08); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .gallery-described {
+    width: calc(100vw - 2rem) !important;
+    transition: none !important;
+  }
+  .gd-stage { height: 300px; }
+  .gd-arrow { width: 36px; height: 36px; font-size: 1.1rem; }
+  .gd-desc-body { -webkit-line-clamp: 3; }
 }
