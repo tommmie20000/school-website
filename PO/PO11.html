@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PO11 - Fotos - Deel 2/2</title>
+  <link rel="stylesheet" href="POstyles.css">
+    <script src="https://unpkg.com/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+</head>
+<body>
+  <a href="../index.html" class="top-left-back-btn" title="Terug naar Home">&#8592;</a>
+  <canvas id="starfield"></canvas>
+  <main>
+    <h1 class="title">PO11 - Fotos - Deel 2/2</h1>
+    <div class="tags"><span>Foto's</span><span>Posering</span><span>Creativiteit</span></div>
+    <img class="image" src="pics/PO11/20260319_162726.jpg" alt="PO10 detail" style="overflow: hidden;">
+
+    <p> Donderdag 19 Maart was het uiteindelijk zover; de foto's worden gepresenteerd op het kasteelplein. 2 dagen ervoor, op dinsdag 17 Maart, moesten we nog meehelpen met alles opzetten en klaarmaken. De tentoonstelling werdt onthuld door wethouder Marita van Lierop.</p>
+
+    <p>Ik vond het erg leuk om al mijn werk gepresenteerd te zien op een plekje. Frank kon er helaas niet bij zijn, omdat hij in een fietsongeluk was gekomen en daarbij zijn heup had gebroken. Dit was teleurstellend, maar we hopen dat hij snel herstelt en de presentatie nog kan bekijken. <br>
+    </p>
+    <img class="image" src="pics/PO11/20260319_162743.jpg" alt="PO10 detail" style="overflow: hidden;">
+    <p>Dit zijn de fotos die gepresenteerd zijn.</p>
+
+    <h2>Interview</h2>
+    <p>Ik heb ook een interview gekregen van Dit is Helmond. Hierbij vroegen ze mijn beoordeling op het project, en het verhaal achter sommige fotos.<br>
+    Ik vond het een leuk project, met een leuke leerervaring van hoe analoge cameras werken en hoe je ze kan gebruiken, en hoe ik betere foto's kan maken. Ik vind het nog steeds heel leuk om fotos te maken met mijn camera op vakanties en ze ook te bewerkent. Het is en blijft een passie van me.</p>
+<!--Back button-->
+    <a href="../index.html" class="back-btn">← Terug naar Portfolio</a>
+<!--End--> 
+
+</main>
+
+<script>
+  mediumZoom('.image, .dropdown-img', {
+    background: 'transparent',
+    margin: 24 // optional: prevents edge-to-edge stretch
+  })
+
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+    let stars = [];
+    const STAR_COUNT = 400;
+
+    // Glare settings
+    const GLARE_COUNT = 6;
+    let glares = [];
+
+    // Flying stars settings
+    const FLYING_STAR_INTERVAL = 20000; // ms
+    const FLYING_STAR_SPEED = 7;
+    const FLYING_STAR_LENGTH = 500;
+    let flyingStars = [];
+
+    function randomColor() {
+        // Soft pastel colors for glare
+        const hue = Math.floor(Math.random() * 360);
+        return `hsla(${hue}, 70%, 80%, 0.06)`;
+    }
+
+    function initGlares() {
+        glares = [];
+        for (let i = 0; i < GLARE_COUNT; i++) {
+            glares.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                r: Math.random() * 200 + 120,
+                dx: (Math.random() - 0.5) * 0.2,
+                dy: (Math.random() - 0.5) * 0.2,
+                dr: (Math.random() - 0.5) * 0.1,
+                color: randomColor()
+            });
+        }
+    }
+
+    function updateGlares() {
+        for (let g of glares) {
+            g.x += g.dx;
+            g.y += g.dy;
+            g.r += g.dr;
+            // Bounce off edges
+            if (g.x < 0 || g.x > w) g.dx *= -1;
+            if (g.y < 0 || g.y > h) g.dy *= -1;
+            if (g.r < 100 || g.r > 300) g.dr *= -1;
+        }
+    }
+
+    function drawGlares() {
+        for (let g of glares) {
+            const grad = ctx.createRadialGradient(g.x, g.y, 0, g.x, g.y, g.r);
+            grad.addColorStop(0, g.color);
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.globalAlpha = 1;
+            ctx.beginPath();
+            ctx.arc(g.x, g.y, g.r, 0, Math.PI * 2);
+            ctx.fillStyle = grad;
+            ctx.fill();
+        }
+    }
+
+    function initStars() {
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                r: Math.random() * 1.5 + 0.5,
+                baseR: 0, // for twinkle
+                twinkleSpeed: Math.random() * 0.0005 + 0.0002,
+                twinklePhase: Math.random() * Math.PI * 2
+            });
+        }
+    }
+
+    function drawStars() {
+        ctx.clearRect(0, 0, w, h);
+        drawGlares();
+        ctx.save();
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        for (let s of stars) {
+            // Twinkle: radius oscillates smoothly
+            s.baseR = s.r + Math.sin(performance.now() * s.twinkleSpeed + s.twinklePhase) * 0.6;
+            ctx.moveTo(s.x, s.y);
+            ctx.arc(s.x, s.y, Math.max(0.2, s.baseR), 0, Math.PI * 2);
+        }
+        ctx.globalAlpha = 0.85;
+        ctx.fill();
+        ctx.restore();
+        updateStars();
+        updateGlares();
+    }
+
+    function updateStars() {
+        for (let s of stars) {
+            s.y += 0.08; // Slower movement (was 0.3)
+            if (s.y > h) { s.x = Math.random() * w; s.y = 0; }
+        }
+    }
+
+    // Flying stars logic
+    function spawnFlyingStar() {
+        // Random direction: left->right or right->left, random vertical position
+        const dir = Math.random() < 0.5 ? 1 : -1;
+        const y = Math.random() * h * 0.8 + h * 0.1;
+        const x = dir === 1 ? -FLYING_STAR_LENGTH : w + FLYING_STAR_LENGTH;
+        const angle = Math.random() * 0.3 - 0.15; // slight angle
+        flyingStars.push({
+            x, y,
+            vx: (FLYING_STAR_SPEED * 0.2) * dir * Math.cos(angle), // Slower speed
+            vy: (FLYING_STAR_SPEED * 0.3) * Math.sin(angle),       // Slower speed
+            trail: [],
+            maxTrail: 18,
+            brightness: 1.0
+        });
+    }
+
+    function updateFlyingStars() {
+        for (let star of flyingStars) {
+            // Move star
+            star.x += star.vx;
+            star.y += star.vy;
+            // Add to trail
+            star.trail.unshift({ x: star.x, y: star.y, alpha: 1 });
+            if (star.trail.length > star.maxTrail) star.trail.pop();
+        }
+        // Remove stars out of bounds
+        flyingStars = flyingStars.filter(star =>
+            star.x > -FLYING_STAR_LENGTH && star.x < w + FLYING_STAR_LENGTH &&
+            star.y > -FLYING_STAR_LENGTH && star.y < h + FLYING_STAR_LENGTH
+        );
+    }
+
+    function drawFlyingStars() {
+        for (let star of flyingStars) {
+            // Draw trail
+            for (let i = 0; i < star.trail.length - 1; i++) {
+                const p1 = star.trail[i];
+                const p2 = star.trail[i + 1];
+                ctx.save();
+                ctx.strokeStyle = `rgba(255,255,255,${0.7 * (1 - i / star.trail.length)})`;
+                ctx.lineWidth = 2 - i * 1.5 / star.trail.length;
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+                ctx.restore();
+            }
+            // Draw star head
+            ctx.save();
+            ctx.globalAlpha = star.brightness;
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = 'white';
+            ctx.shadowColor = 'white';
+            ctx.shadowBlur = 16;
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    function animate() {
+        drawStars();
+        drawFlyingStars();
+        updateFlyingStars();
+        requestAnimationFrame(animate);
+    }
+
+    initStars();
+    initGlares();
+    animate();
+
+    // Flying stars timer
+    let flyingStarTimer = setInterval(spawnFlyingStar, FLYING_STAR_INTERVAL);
+
+    window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        initStars();
+        initGlares();
+    });
+</script>
+<!-- Gallery navigation script -->
+<script>
+    (function(){
+        // initialise *every* gallery on the page instead of just the first one
+        const initGallery = () => {
+            const galleries = document.querySelectorAll('.gallery-box');
+            galleries.forEach(gallery => {
+                const slots = Array.from(gallery.querySelectorAll('.slot'));
+                const left = gallery.querySelector('.arrow.left');
+                const right = gallery.querySelector('.arrow.right');
+                if (!left || !right || slots.length === 0) return;
+                let idx = 0;
+
+                function positionArrows(){
+                    const leftArrow = gallery.querySelector('.arrow.left');
+                    const rightArrow = gallery.querySelector('.arrow.right');
+                    if (!leftArrow || !rightArrow) return;
+                    const active = gallery.querySelector('.slot.active');
+                    if (!active) return;
+                    const img = active.querySelector('img');
+                    if (!img) return;
+                    const gRect = gallery.getBoundingClientRect();
+                    const iRect = img.getBoundingClientRect();
+                    const arrowW = leftArrow.offsetWidth || 48;
+                    const gap = 8;
+                    let leftPos = iRect.left - gRect.left - arrowW - gap;
+                    let rightPos = iRect.left - gRect.left + iRect.width + gap;
+                    leftPos = Math.max(6, Math.min(leftPos, gRect.width - arrowW - 6));
+                    rightPos = Math.max(6, Math.min(rightPos, gRect.width - arrowW - 6));
+                    leftArrow.style.left = leftPos + 'px';
+                    rightArrow.style.left = rightPos + 'px';
+                    const topPos = (iRect.top - gRect.top) + (iRect.height / 2);
+                    leftArrow.style.top = topPos + 'px';
+                    rightArrow.style.top = topPos + 'px';
+                    leftArrow.style.transform = 'translateY(-50%)';
+                    rightArrow.style.transform = 'translateY(-50%)';
+                }
+
+                function show(i) {
+                    idx = (i + slots.length) % slots.length;
+                    slots.forEach((s, j) => s.classList.toggle('active', j === idx));
+                    const counter = gallery.querySelector('.gallery-counter');
+                    if (counter) {
+                        const currentEl = counter.querySelector('.current');
+                        currentEl.textContent = String(idx + 1);
+                        counter.classList.remove('flash');
+                        void counter.offsetWidth;
+                        counter.classList.add('flash');
+                    }
+                    positionArrows();
+                    positionCaption();
+                }
+
+                left.addEventListener('click', () => show(idx - 1));
+                right.addEventListener('click', () => show(idx + 1));
+
+                // zoom handling (identical to original, scoped per gallery)
+                let zoomInstance = null;
+                try{
+                    const galleryImgs = gallery.querySelectorAll('.slot img');
+                    if (galleryImgs.length) {
+                        zoomInstance = mediumZoom(Array.from(galleryImgs), { background: 'rgba(0,0,0,0.85)', margin: 24 });
+                        if (zoomInstance && typeof zoomInstance.on === 'function'){
+                            zoomInstance.on('open', ({target}) => {
+                                const srcImg = target || document.querySelector('.medium-zoom-image--opened');
+                                showZoomCaptionFor(srcImg);
+                            });
+                            zoomInstance.on('close', () => {
+                                removeZoomCaption();
+                            });
+                        }
+                    }
+                } catch (e) {
+                    /* ignore */
+                }
+
+                // caption for the zoomed image (shared, but gallery-scoped lookups)
+                let _zoomCaptionEl = null;
+                function showZoomCaptionFor(srcImg){
+                    removeZoomCaption();
+                    if (!srcImg) return;
+                    const orig = Array.from(gallery.querySelectorAll('.slot img')).find(i=>i.src === srcImg.src || i.getAttribute('data-zoom-src') === srcImg.src) || null;
+                    let text = '';
+                    if (orig) {
+                        const fig = orig.closest('.slot');
+                        const cap = fig && fig.querySelector('figcaption');
+                        if (cap) text = cap.textContent.trim();
+                    }
+                    if (!text) return;
+                    _zoomCaptionEl = document.createElement('div');
+                    _zoomCaptionEl.className = 'medium-zoom-caption';
+                    _zoomCaptionEl.textContent = text;
+                    document.body.appendChild(_zoomCaptionEl);
+                    let frames = 0;
+                    function tick(){
+                        positionZoomCaption();
+                        frames++;
+                        if (frames < 12 && _zoomCaptionEl) requestAnimationFrame(tick);
+                    }
+                    requestAnimationFrame(tick);
+                    window.addEventListener('resize', positionZoomCaption);
+                    window.addEventListener('scroll', positionZoomCaption, true);
+                }
+                function removeZoomCaption(){
+                    if (_zoomCaptionEl){
+                        _zoomCaptionEl.remove();
+                        _zoomCaptionEl = null;
+                        window.removeEventListener('resize', positionZoomCaption);
+                        window.removeEventListener('scroll', positionZoomCaption, true);
+                    }
+                }
+                function positionZoomCaption(){
+                    if (!_zoomCaptionEl) return;
+                    const opened = document.querySelector('.medium-zoom-image--opened');
+                    if (!opened) return;
+                    const r = opened.getBoundingClientRect();
+                    _zoomCaptionEl.style.left = (r.left + r.width / 2) + 'px';
+                    const capH = _zoomCaptionEl.offsetHeight || 40;
+                    const topPos = (r.top + r.height) - capH - 18;
+                    _zoomCaptionEl.style.top = topPos + 'px';
+                    _zoomCaptionEl.style.transform = 'translate(-50%, 0)';
+                    _zoomCaptionEl.style.maxWidth = Math.max(120, r.width - 48) + 'px';
+                }
+
+                // resize/load listeners for this gallery
+                window.addEventListener('resize', () => {
+                    requestAnimationFrame(positionArrows);
+                    requestAnimationFrame(positionCaption);
+                });
+                gallery.querySelectorAll('.slot img').forEach(img => img.addEventListener('load', ()=> {
+                    requestAnimationFrame(positionArrows);
+                    requestAnimationFrame(positionCaption);
+                }));
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') show(idx - 1);
+                    if (e.key === 'ArrowRight') show(idx + 1);
+                });
+
+                gallery.addEventListener('pointerdown', (ev)=>{
+                    const img = ev.target.closest && ev.target.closest('.slot') && ev.target.closest('.slot').querySelector('img');
+                    if (!img) return;
+                    img.style.transform = 'scale(0.995)';
+                });
+                gallery.addEventListener('pointerup', (ev)=>{
+                    const img = ev.target.closest && ev.target.closest('.slot') && ev.target.closest('.slot').querySelector('img');
+                    if (!img) return;
+                    img.style.transform = '';
+                });
+
+                // initial positioning
+                requestAnimationFrame(()=>{ positionArrows(); positionCaption(); });
+                setTimeout(()=>{ positionArrows(); positionCaption(); }, 120);
+                window.addEventListener('load', () => requestAnimationFrame(()=>{ positionArrows(); positionCaption(); }));
+            });
+        };
+
+        if (document.readyState !== 'loading') initGallery();
+        else document.addEventListener('DOMContentLoaded', initGallery);
+    })();
+
+    // Dropdown toggle with smooth slide and arrow rotation
+    document.querySelectorAll('.dropdown-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const dropdown = btn.parentElement;
+        dropdown.classList.toggle('active');
+      });
+    });
+
+
+
+(function () {
+  const STAGE_H = 480;   // keep in sync with .gd-stage height
+  const MAX_W   = 900;   // keep in sync with max-width
+  const MIN_W   = 200;
+
+  document.querySelectorAll('[data-gd]').forEach(gallery => {
+    const slides  = [...gallery.querySelectorAll('[data-gd-slide]')];
+    const descs   = [...gallery.querySelectorAll('[data-gd-desc]')];
+    const counter = gallery.querySelector('[data-gd-counter]');
+    const stage   = gallery.querySelector('.gd-stage');
+    const total   = slides.length;
+    let   current = 0;
+
+    // ── Width morphing ──────────────────────────────────────────
+    function applyWidth(img) {
+      if (!img.naturalWidth || !img.naturalHeight) return;
+      const h     = stage.offsetHeight || STAGE_H;
+      const ratio = img.naturalWidth / img.naturalHeight;
+      const ideal = Math.round(h * ratio);
+      const vw    = window.innerWidth - 32;
+      gallery.style.width = Math.min(Math.max(ideal, MIN_W), MAX_W, vw) + 'px';
+    }
+
+    function resizeToSlide(idx) {
+      const img = slides[idx].querySelector('img');
+      if (!img) return;
+      if (img.complete && img.naturalWidth) {
+        applyWidth(img);
+      } else {
+        img.addEventListener('load', () => applyWidth(img), { once: true });
+      }
+    }
+
+    // ── Navigation ──────────────────────────────────────────────
+    function goTo(idx) {
+      slides[current].classList.remove('active');
+      descs[current].classList.remove('active');
+      current = (idx + total) % total;
+      slides[current].classList.add('active');
+      descs[current].classList.add('active');
+      resizeToSlide(current);
+
+      if (counter) {
+        counter.textContent = `${current + 1} / ${total}`;
+        counter.classList.remove('pop');
+        void counter.offsetWidth;
+        counter.classList.add('pop');
+      }
+    }
+
+    gallery.querySelector('[data-gd-prev]').addEventListener('click', () => goTo(current - 1));
+    gallery.querySelector('[data-gd-next]').addEventListener('click', () => goTo(current + 1));
+
+    gallery.setAttribute('tabindex', '0');
+    gallery.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft')  goTo(current - 1);
+      if (e.key === 'ArrowRight') goTo(current + 1);
+    });
+
+    // ── Init ────────────────────────────────────────────────────
+    resizeToSlide(0);
+
+    slides.forEach(s => {
+      const img = s.querySelector('img');
+      if (img && !img.complete) { const p = new Image(); p.src = img.src; }
+    });
+
+    window.addEventListener('resize', () => resizeToSlide(current), { passive: true });
+
+    if (typeof mediumZoom !== 'undefined') {
+      mediumZoom(gallery.querySelectorAll('.gd-slide img'), { background: '#05030a' });
+    }
+  });
+})();
+</script>
+</body>
+</html>
